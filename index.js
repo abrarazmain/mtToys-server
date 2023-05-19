@@ -24,7 +24,19 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    const toyCollection = client.db("toyDB").collection("toys");
+      const toyCollection = client.db("toyDB").collection("toys");
+      
+
+      app.get('/allToys/:category', async (req, res) => { 
+          const category = req.params.category;
+          if (category == 'Sports Car' || category == 'Truck' || category == 'Regular Car') {
+              const result = await toyCollection.find({ category: category }).toArray();
+              return res.send(result)
+          }
+          const result = await toyCollection.find({}).toArray()
+          console.log(category);
+          res.send(result)
+      })
 
     app.post("/toys", async (req, res) => {
       const toy = req.body;
