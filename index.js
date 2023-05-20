@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -37,6 +37,20 @@ async function run() {
           console.log(category);
           res.send(result)
       })
+    
+      app.get('/singleToy/:id', async (req, res) => {
+        const id = req.params.id;
+      
+        try {
+          const objectId = new ObjectId(id);
+          const query = { _id: objectId };
+          const result = await toyCollection.findOne(query);
+          res.send(result);
+        } catch (error) {
+          res.status(400).send('Invalid ID');
+        }
+      });
+      
 
     app.post("/toys", async (req, res) => {
       const toy = req.body;
