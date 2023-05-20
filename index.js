@@ -91,7 +91,7 @@ async function run() {
         const filter = { _id: new ObjectId(id) };
         const updateDoc = {
           $set: {
-           ...body
+            ...body,
           },
         };
         const result = await toyCollection.updateOne(filter, updateDoc);
@@ -100,6 +100,13 @@ async function run() {
         console.error(error);
         res.status(500).send("Internal Server Error");
       }
+    });
+
+    app.delete("/deleteToy/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const result = await toyCollection.deleteOne({ _id: new ObjectId(id) });
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
